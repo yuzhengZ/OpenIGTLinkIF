@@ -33,7 +33,6 @@
 
 //---------------------------------------------------------------------------
 vtkStandardNewMacro(vtkIGTLToMRMLPosition);
-vtkCxxRevisionMacro(vtkIGTLToMRMLPosition, "$Revision: 15552 $");
 
 //---------------------------------------------------------------------------
 vtkIGTLToMRMLPosition::vtkIGTLToMRMLPosition()

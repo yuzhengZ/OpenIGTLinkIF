@@ -41,8 +41,6 @@
 
 //---------------------------------------------------------------------------
 vtkStandardNewMacro(vtkIGTLToMRMLImage);
-vtkCxxRevisionMacro(vtkIGTLToMRMLImage, "$Revision: 15621 $");
-
 //---------------------------------------------------------------------------
 vtkIGTLToMRMLImage::vtkIGTLToMRMLImage()
 {
@@ -73,15 +71,21 @@ vtkMRMLNode* vtkIGTLToMRMLImage::CreateNewNode(vtkMRMLScene* scene, const char* 
   image->SetSpacing(1.0, 1.0, 1.0);
   //image->SetOrigin( fov/2, -fov/2, -0.0 );
   image->SetOrigin(0.0, 0.0, 0.0);
+#if (VTK_MAJOR_VERSION <= 5)
   image->SetNumberOfScalarComponents(1);
   image->SetScalarTypeToShort();
   image->AllocateScalars();
+#else
+  image->AllocateScalars(VTK_SHORT, 1);
+#endif
 
   short* dest = (short*) image->GetScalarPointer();
   if (dest)
     {
     memset(dest, 0x00, 256*256*sizeof(short));
+#if (VTK_MAJOR_VERSION <= 5)
     image->Update();
+#endif
     }
 
   scalarNode->SetAndObserveImageData(image);
@@ -262,9 +266,13 @@ int vtkIGTLToMRMLImage::IGTLToMRML(igtl::MessageBase::Pointer buffer, vtkMRMLNod
     newImageData->SetExtent(0, size[0]-1, 0, size[1]-1, 0, size[2]-1);
     newImageData->SetOrigin(0.0, 0.0, 0.0);
     newImageData->SetSpacing(1.0, 1.0, 1.0);
+#if (VTK_MAJOR_VERSION <= 5)
     newImageData->SetNumberOfScalarComponents(1);
     newImageData->SetScalarType(scalarType);
     newImageData->AllocateScalars();
+#else
+    newImageData->AllocateScalars(scalarType, 1);
+#endif
     imageData = newImageData;
     }
 
